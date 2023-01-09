@@ -4,7 +4,7 @@
     "description" : "Coming soon",
     "dependencies": {
     },
-    "keywords": [ "zont", "zont-online" ],
+    "keywords": [ "node-red", "zont", "zont-online" ],
     "node-red" : {
         "version": ">=2.0.0",
         "nodes": {
