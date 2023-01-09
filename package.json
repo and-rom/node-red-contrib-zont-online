@@ -1,0 +1,14 @@
+{
+    "name" : "node-red-contrib-zont-online",
+    "version" : "0.0.1",
+    "description" : "Coming soon",
+    "dependencies": {
+    },
+    "keywords": [ "zont", "zont-online" ],
+    "node-red" : {
+        "version": ">=2.0.0",
+        "nodes": {
+            "device out": "device-out.js"
+        }
+    }
+}
