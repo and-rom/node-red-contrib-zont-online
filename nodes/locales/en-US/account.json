@@ -1,0 +1,15 @@
+{
+    "label": {
+        "name": "Name",
+        "email": "E-mail",
+        "token": "Token",
+        "username": "Username",
+        "password": "Password",
+        "get_token": "Get token",
+        "devices_list": "Devices"
+    },
+    "messages": {
+        "input_err": "Empty e-mail or username or password",
+        "success": "Success"
+    }
+}

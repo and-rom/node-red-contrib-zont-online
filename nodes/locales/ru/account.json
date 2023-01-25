@@ -1,0 +1,15 @@
+{
+    "label": {
+        "name": "Имя",
+        "email": "E-mail",
+        "token": "Токен",
+        "username": "Логин",
+        "password": "Пароль",
+        "get_token": "Получить токен",
+        "devices_list": "Устройства"
+    },
+    "messages": {
+        "input_err": "Пустой e-mail или логин или пароль",
+        "success": "Успешно"
+    }
+}

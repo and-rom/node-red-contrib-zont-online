@@ -2,7 +2,14 @@
     "name": "node-red-contrib-zont-online",
     "version": "0.0.5",
     "description": "Coming soon",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"no test specified\""
+    },
     "dependencies": {
+        "request": "^2.88.2",
+        "request-promise": "^4.2.6",
+        "request-promise-native": "^1.0.8"
     },
     "repository": {
         "type": "git",
@@ -11,11 +18,16 @@
     "engines": {
         "node": ">=12.0.0"
     },
-    "keywords": [ "node-red", "zont", "zont-online" ],
+    "keywords": [
+        "node-red",
+        "zont",
+        "zont-online"
+    ],
     "node-red": {
         "version": ">=2.0.0",
         "nodes": {
-            "device out": "device-out.js"
+            "account": "nodes/account.js",
+            "device": "nodes/device.js"
         }
     },
     "author": "AndRom",

@@ -1,0 +1,57 @@
+<script type="text/javascript">
+    RED.nodes.registerType('device',{
+        category: 'zont-online',
+        defaults: {
+            name: {
+                value: ""
+            },
+            account: {
+                value: null,
+                type: "account",
+                required: true
+            },
+            device_id: {
+                value: "",
+                required: true
+            },
+        },
+        inputs:1,
+        outputs:1,
+        label: function() { return this.name || "device" },
+        color: '#2bb6ba',
+        icon: "node-device-icon.svg",
+        oneditprepare: function () {
+            let node = this;
+
+            if ($('#node-input-account').val() == '_ADD_') return;
+
+            let account = RED.nodes.node($('#node-input-account').val());
+            $.getJSON('devices/'+account.id)
+            .then(data => {
+                let selector = $('#node-input-device_id');
+
+                selector.empty();
+                data.devices.forEach(device => {
+                    selector.append(`<option value="${device.id}">${device.name}</option>`);
+                });
+
+                selector.val(typeof node.device_id !== 'undefined' ? node.device_id : '');
+            });
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="device">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]label.name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-account"><i class="fa fa-globe"></i> <span data-i18n="label.account"></span></label>
+        <input type="text" id="node-input-account" placeholder="account">
+    </div>
+    <div class="form-row">
+        <label for="node-input-device_id"><i class="fa fa-database"></i> <span data-i18n="label.device"></label>
+        <select id="node-input-device_id" data-single="true" style="width: 70%"></select>
+    </div>
+</script>

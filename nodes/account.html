@@ -1,0 +1,156 @@
+<script type="text/javascript">
+    RED.nodes.registerType('account',{
+        category: 'config',
+        credentials: {
+            email: {
+                type:"text",
+                required: true
+            },
+            token: {
+                type:"text",
+                required: true
+            }
+        },
+        defaults: {
+            name: {
+                value: null
+            },
+            devices: {
+                value: []
+            },
+        },
+        label: function() { return this.name  || "account" },
+        oneditprepare: function () {
+            let node = this;
+            let treeList = $("<div>")
+                .css({width: "100%", height: "100%"})
+                .appendTo(".node-devices-list")
+                .treeList({autoSelect:false});
+
+            $('#btnGetToken').on('click', function () {
+                let email = $('#node-config-input-email').val();
+                let username = $('#username').val();
+                let password = $('#password').val();
+
+                getAuthToken(email, username, password);
+            });
+            $('#btnGetDevices').on('click', function () {
+                $.getJSON('devices/'+node.id, {remote: true})
+                .then(data => {
+                    if (data.ok == true) {
+                        node.devices = data.devices;
+                        buildDevicesList(treeList, data.devices);
+                    }
+                });
+            });
+
+            $.getJSON('devices/'+node.id)
+            .then(data => {
+                if (data.ok == true) {
+                    buildDevicesList(treeList, data.devices);
+                }
+            });
+        },
+        oneditresize: function () {
+            resizeDevicesList();
+        }
+    });
+
+    function buildDevicesList(treeList, devices) {
+        treeList.treeList('data',devices.map(({name: label})=>({label})));
+        resizeDevicesList();
+    }
+
+    function resizeDevicesList() {
+        var rows = $("#node-config-dialog-edit-form>div:not(.node-devices-list)");
+        var height = $("#node-config-dialog-edit-form").height();
+        for (var i=0;i<rows.length;i++) {
+            height -= $(rows[i]).outerHeight(true);
+        }
+        var editorRow = $("#node-config-dialog-edit-form>div.node-devices-list");
+        height -= (parseInt(editorRow.css("marginTop"))+parseInt(editorRow.css("marginBottom")));
+        $(".node-devices-list").css("height",height+"px");
+    }
+
+    function getAuthToken(email, username, password,) {
+        const base_url = 'https://zont-online.ru/api';
+        const url      = `${base_url}/get_authtoken`;
+        const data     = '{"client_name": "Node-RED"}'
+
+        $('#status').hide();
+
+        if (!email || !username || !password) {
+            $('#status-input_err').show();
+            return;
+        } else {
+            $('#status-input_err').hide();
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'Content-Type': 'application/json',
+                'X-ZONT-Client': email,
+                'Authorization': "Basic " + btoa(username + ":" + password)
+            }
+        });
+
+        $.post(url,data)
+        .done(function(result) {
+            if (result.ok && result.token) {
+                $('#status-success').show();
+                $('#node-config-input-token').val(result.token);
+                $('#username, #password').val('');
+            }
+        })
+        .fail(function(result) {
+            if (!result.responseJSON.ok) {
+                $('#status').html(result.responseJSON.error_ui);
+                $('#status').show();
+            }
+        });
+    }
+</script>
+
+<script type="text/html" data-template-name="account">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="label.name"></span></label>
+        <input type="text" id="node-config-input-name" data-i18n="[placeholder]label.name">
+        <hr style="margin: 5px 0 10px;">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-email"><i class="fa fa-envelope"></i> <span data-i18n="label.email"></span></label>
+        <input type="text" id="node-config-input-email" data-i18n="[placeholder]label.email">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-token"><i class="fa fa-asterisk"></i> <span data-i18n="label.token"></span></label>
+        <input type="text" id="node-config-input-token" data-i18n="[placeholder]label.token">
+        <hr style="margin: 5px 0 10px;">
+    </div>
+    <div class="form-row">
+        <label for="username"><i class="fa fa-user"></i> <span data-i18n="label.username"></span></label>
+        <input type="text" id="username">
+    </div>
+    <div class="form-row">
+        <label for="password"><i class="fa fa-lock"></i> <span data-i18n="label.password"></span></label>
+        <input type="password" id="password">
+    </div>
+    <div class="form-row" style="text-align-last: center;">
+        <span style="display: none;color: red;" id="status-input_err"><span data-i18n="messages.input_err"></span></span>
+        <span style="display: none;color: green;" id="status-success"><span data-i18n="messages.success"></span></span>
+        <span style="display: none;" id="status"></span>
+    </div>
+    <div class="form-row" style="text-align-last: right;">
+        <span class="button-group">
+            <button type="button" id="btnGetToken" class="red-ui-button toggle status-button-group"><span data-i18n="label.get_token"></span></button>
+        </span>
+        <hr style="margin: 5px 0 10px;">
+    </div>
+    <div class="form-row">
+        <span style="font-weight: bold;"><span data-i18n="label.devices_list"></span></span>
+        <span class="button-group">
+            <button type="button" id="btnGetDevices" class="red-ui-button"><i class="fa fa-refresh"></i></button>
+        </span>
+    </div>
+    <div class="form-row node-devices-list">
+    </div>
+</script>
