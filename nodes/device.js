@@ -31,7 +31,7 @@ module.exports = function(RED) {
         console.log('getDevice');
         let options = {
             method: 'POST',
-            url: 'https://zont-online.ru/api/devices',
+            url: 'https://lk.zont-online.ru/api/devices',
             headers: {
                 'Content-Type': 'application/json',
                 'X-ZONT-Client': email,
