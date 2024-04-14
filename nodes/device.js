@@ -25,7 +25,7 @@ module.exports = function(RED) {
 
     };
 
-    RED.nodes.registerType("device",DeviceNode);
+    RED.nodes.registerType("zont-device",DeviceNode);
 
     async function getDevice(email, token, device_id) {
         console.log('getDevice');

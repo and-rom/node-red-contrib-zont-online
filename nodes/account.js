@@ -9,7 +9,7 @@ module.exports = function(RED) {
         node.devices = config.devices;
     }
 
-    RED.nodes.registerType("account", AccountNode, {
+    RED.nodes.registerType("zont-account", AccountNode, {
             credentials: {
                 email: {type:"text"},
                 token: {type:"text"}
