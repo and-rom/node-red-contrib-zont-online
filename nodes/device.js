@@ -33,7 +33,6 @@ module.exports = function(RED) {
     RED.nodes.registerType("zont-device",DeviceNode);
 
     async function getDevice(email, token, device_id) {
-        console.log('getDevice');
         let options = {
             method: 'POST',
             url: 'https://lk.zont-online.ru/api/devices',
@@ -47,12 +46,10 @@ module.exports = function(RED) {
 
         let result = await rp(options)
         .then(function(response) {
-            console.log('then');
             let device = response.devices.find(device => device.id === device_id);
             return {"ok": true, "device": device};
         })
         .catch(function (error) {
-            console.log('catch');
             return {"ok": false};
         });
 
