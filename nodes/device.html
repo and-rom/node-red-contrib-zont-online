@@ -14,10 +14,22 @@
                 value: "",
                 required: true
             },
+            device_name: {
+                value: null
+            },
         },
         inputs:1,
         outputs:1,
-        label: function() { return this.name || "device" },
+        label: function() {
+            if (this.name) return this.name
+
+            let node = this;
+
+            if (node.device_name) return node.device_name;
+
+            return "device";
+        },
+        paletteLabel: "device",
         color: '#2bb6ba',
         icon: "node-device-icon.svg",
         oneditprepare: function () {
