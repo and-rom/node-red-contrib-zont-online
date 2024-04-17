@@ -35,7 +35,7 @@
                 getAuthToken(email, username, password);
             });
             $('#btnGetDevices').on('click', function () {
-                $.getJSON('devices/'+node.id, {remote: true})
+                $.getJSON('zont-devices/'+node.id, {remote: true})
                 .then(data => {
                     if (data.ok == true) {
                         node.devices = data.devices;
@@ -44,7 +44,7 @@
                 });
             });
 
-            $.getJSON('devices/'+node.id)
+            $.getJSON('zont-devices/'+node.id)
             .then(data => {
                 if (data.ok == true) {
                     buildDevicesList(treeList, data.devices);

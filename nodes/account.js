@@ -17,7 +17,7 @@ module.exports = function(RED) {
             devices: {}
         });
 
-    RED.httpAdmin.get("/devices/:id", RED.auth.needsPermission('account.read'), function(req, res) {
+    RED.httpAdmin.get("/zont-devices/:id", RED.auth.needsPermission('account.read'), function(req, res) {
         var node = RED.nodes.getNode(req.params.id);
         if (node != null) {
             if (req.query.remote) {

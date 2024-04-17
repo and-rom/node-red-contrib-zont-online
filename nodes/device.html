@@ -26,7 +26,7 @@
             if ($('#node-input-account').val() == '_ADD_') return;
 
             let account = RED.nodes.node($('#node-input-account').val());
-            $.getJSON('devices/'+account.id)
+            $.getJSON('zont-devices/'+account.id)
             .then(data => {
                 let selector = $('#node-input-device_id');
 
