@@ -10,16 +10,21 @@ module.exports = function(RED) {
         node.account = RED.nodes.getNode(config.account);
         node.device_id = config.device_id;
 
-        this.on('input', (msg, send, done) => {
+        this.on('input', async (msg, send, done) => {
             send = send || function() { node.send.apply(node,arguments) }
-
-            console.log('msg: ', msg);
-            console.log('node: ', node);
-
-            msg.payload = getDevice(node.account.credentials.email, node.account.credentials.token, node.device_id);
+            switch (msg.payload) {
+                case "get":
+                    msg.payload = await getDevice(node.account.credentials.email, node.account.credentials.token, parseInt(node.device_id));
+                    break;
+                case "set":
+                    msg.payload = "not implemented yet"
+                    break;
+                default:
+                    msg.payload = "no request type specified"
+                    break;
+            }
             send(msg);
 
-            console.log('done');
             if (done) {done();}
         });
 
@@ -43,7 +48,7 @@ module.exports = function(RED) {
         let result = await rp(options)
         .then(function(response) {
             console.log('then');
-            let device = response.devices.filter(device => {device.id === device_id});
+            let device = response.devices.find(device => device.id === device_id);
             return {"ok": true, "device": device};
         })
         .catch(function (error) {
