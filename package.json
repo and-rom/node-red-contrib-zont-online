@@ -26,8 +26,8 @@
     "node-red": {
         "version": ">=2.0.0",
         "nodes": {
-            "account": "nodes/account.js",
-            "device": "nodes/device.js"
+            "zont-account": "nodes/account.js",
+            "zont-device": "nodes/device.js"
         }
     },
     "author": "AndRom",

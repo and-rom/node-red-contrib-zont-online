@@ -7,7 +7,7 @@
             },
             account: {
                 value: null,
-                type: "account",
+                type: "zont-account",
                 required: true
             },
             device_id: {
@@ -37,11 +37,15 @@
 
                 selector.val(typeof node.device_id !== 'undefined' ? node.device_id : '');
             });
+        },
+        oneditsave: function () {
+            let node = this;
+            node.device_name = $('#node-input-device_id option:selected').text();
         }
     });
 </script>
 
-<script type="text/html" data-template-name="device">
+<script type="text/html" data-template-name="zont-device">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="label.name"></span></label>
         <input type="text" id="node-input-name" data-i18n="[placeholder]label.name">
