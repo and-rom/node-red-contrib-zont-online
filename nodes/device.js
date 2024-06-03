@@ -50,7 +50,7 @@ module.exports = function(RED) {
             return {"ok": true, "device": device};
         })
         .catch(function (error) {
-            return {"ok": false};
+            return {"ok": false, "error": error};
         });
 
         return result;
