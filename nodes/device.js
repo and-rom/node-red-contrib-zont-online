@@ -14,7 +14,10 @@ module.exports = function(RED) {
             send = send || function() { node.send.apply(node,arguments) }
             switch (msg.payload) {
                 case "get":
-                    msg.payload = await getDevice(node.account.credentials.email, node.account.credentials.token, parseInt(node.device_id));
+                    msg.payload = await getDevice(node.account.credentials.email,
+                                                  node.account.credentials.token,
+                                                  parseInt(node.device_id),
+                                                  typeof msg.load_io == 'boolean' ? msg.load_io : false);
                     break;
                 case "set":
                     msg.payload = "not implemented yet"
@@ -32,7 +35,7 @@ module.exports = function(RED) {
 
     RED.nodes.registerType("zont-device",DeviceNode);
 
-    async function getDevice(email, token, device_id) {
+    async function getDevice(email, token, device_id, load_io = false) {
         let options = {
             method: 'POST',
             url: 'https://my.zont.online/api/devices',
@@ -40,6 +43,9 @@ module.exports = function(RED) {
                 'Content-Type': 'application/json',
                 'X-ZONT-Client': email,
                 'X-ZONT-Token': token
+            },
+            body: {
+                load_io: load_io
             },
             json: true
         };
